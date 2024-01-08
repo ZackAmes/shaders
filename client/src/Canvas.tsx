@@ -42,7 +42,7 @@ export const WebGPUCanvas = ({ children, webglFallback = true, ...props }: React
     }
 
     return (
-        <Canvas
+        <Canvas style={{width: 800, height: 800}}
             id="gl"
             gl={(canvas: HTMLCanvasElement) => {
                 return new WebGPURenderer({ canvas })

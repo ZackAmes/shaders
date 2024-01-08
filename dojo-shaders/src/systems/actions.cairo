@@ -2,7 +2,6 @@
 #[starknet::interface]
 trait IActions<TContractState> {
     fn spawn(self: @TContractState);
-    fn move(self: @TContractState, direction: dojo_shaders::models::moves::Direction);
 }
 
 // dojo decorator
@@ -11,33 +10,10 @@ mod actions {
     use super::IActions;
 
     use starknet::{ContractAddress, get_caller_address};
-    use dojo_shaders::models::{position::{Position, Vec2}, moves::{Moves, Direction}};
+    use bytes_31::{Bytes31IntoFelt252};
+    use dojo_shaders::models::shader::{Shader, Manager, ManagerTrait};
 
-    // declaring custom event struct
-    #[event]
-    #[derive(Drop, starknet::Event)]
-    enum Event {
-        Moved: Moved,
-    }
-
-    // declaring custom event struct
-    #[derive(Drop, starknet::Event)]
-    struct Moved {
-        player: ContractAddress,
-        direction: Direction
-    }
-
-    fn next_position(mut position: Position, direction: Direction) -> Position {
-        match direction {
-            Direction::None => { return position; },
-            Direction::Left => { position.vec.x -= 1; },
-            Direction::Right => { position.vec.x += 1; },
-            Direction::Up => { position.vec.y -= 1; },
-            Direction::Down => { position.vec.y += 1; },
-        };
-        position
-    }
-
+    
 
     // impl: implement functions specified in trait
     #[external(v0)]
@@ -48,51 +24,50 @@ mod actions {
             let world = self.world_dispatcher.read();
 
             // Get the address of the current caller, possibly the player's address.
-            let player = get_caller_address();
+            let caller:felt252 = get_caller_address().into();
+            let mut color: ByteArray = "mix(red, blue, sin(time))";
+            let mut position: ByteArray = "positionLocal.add(vec3(0, sin(time).mul(0.2), 0))";
 
-            // Retrieve the player's current position from the world.
-            let position = get!(world, player, (Position));
+            self.create_shader(caller, @color, @position);
 
-            // Retrieve the player's move data, e.g., how many moves they have left.
-            let moves = get!(world, player, (Moves));
-
-            // Update the world state with the new data.
-            // 1. Set players moves to 10
-            // 2. Move the player's position 100 units in both the x and y direction.
-            set!(
-                world,
-                (
-                    Moves { player, remaining: 100, last_direction: Direction::None },
-                    Position { player, vec: Vec2 { x: 10, y: 10 } },
-                )
-            );
+            
         }
 
-        // Implementation of the move function for the ContractState struct.
-        fn move(self: @ContractState, direction: Direction) {
-            // Access the world dispatcher for reading.
+    }
+
+    #[generate_trait]
+    impl Private of PrivateTrait {
+        
+        fn create_shader(self: @ContractState, owner: felt252, color: @ByteArray, position: @ByteArray) {
             let world = self.world_dispatcher.read();
+            
+            let color_data_len = color.data.len();
+            let position_data_len = position.data.len();
 
-            // Get the address of the current caller, possibly the player's address.
-            let player = get_caller_address();
+            println!("color ByteArray has {color_data_len} felts");
+            println!("position ByteArray has {position_data_len} felts");
 
-            // Retrieve the player's current position and moves data from the world.
-            let (mut position, mut moves) = get!(world, player, (Position, Moves));
+            let mut shader = get!(world, owner, Shader);
+            let mut i = 0;
+            loop {
+                if(i == color_data_len) {break;};
+                    let data = *color.data.at(i).into();
+                    let manager = ManagerTrait::color(i.try_into().unwrap(), data.into());
+                    shader.color_length+=1;
+                    set!(world, (manager));
+                i+=1;
+            };
 
-            // Deduct one from the player's remaining moves.
-            moves.remaining -= 1;
-
-            // Update the last direction the player moved in.
-            moves.last_direction = direction;
-
-            // Calculate the player's next position based on the provided direction.
-            let next = next_position(position, direction);
-
-            // Update the world state with the new moves data and position.
-            set!(world, (moves, next));
-
-            // Emit an event to the world to notify about the player's move.
-            emit!(world, Moved { player, direction });
+            loop {
+                if(i == position_data_len) {break;};
+                    let data = *position.data.at(i).into();
+                    let manager = ManagerTrait::position(i.try_into().unwrap(), data.into());
+                    shader.position_length+=1;
+                    set!(world, (manager));
+                i+=1;
+            };
+            
+            set!(world, (shader))
         }
     }
 }
