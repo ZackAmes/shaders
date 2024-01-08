@@ -1,42 +1,28 @@
-import { Color } from 'three'
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { MeshBasicNodeMaterial, mix, positionLocal, sin, timerLocal, vec3 } from 'three/examples/jsm/nodes/Nodes.js'
+import { WebGPUCanvas } from '../Canvas.tsx'
 
-const vertexShader = /* glsl */ `
-attribute vec3 myColors;
+const material = new MeshBasicNodeMaterial()
 
-varying vec2 vUvs;
-varying vec3 vColors;
+const red = vec3(1, 0, 0)
+const blue = vec3(0, 0, 1)
 
-void main() {
-    vec4 localPosition = vec4(position, 1.0);
+const time = timerLocal(0.5)
 
-    gl_Position = projectionMatrix * modelViewMatrix * localPosition;
-    vUvs = uv;
-    vColors = myColors;
-}
-`
+material.colorNode = mix(red, blue, sin(time))
 
-const fragmentShader = /* glsl */ `
-varying vec2 vUvs;
-varying vec3 vColors;
+material.positionNode = positionLocal.add(vec3(0, sin(time).mul(0.2), 0))
 
-void main() {
-    gl_FragColor = vec4(vColors, 1.0);
-}
-`
-
-const colors = [new Color(0xff0000), new Color(0x00ff00), new Color(0x0000ff), new Color(0x00ffff)]
-const colorFloats = colors.map((c) => c.toArray()).flat()
-
-const Basic = () => {
-    return (
-        <mesh position={[0.5, 0.5, 0]}>
-            <shaderMaterial vertexShader={vertexShader} fragmentShader={fragmentShader} />
-            <planeGeometry args={[1, 1]}>
-                <float32BufferAttribute attach="attributes-myColors" args={[colorFloats, 3]} />
-            </planeGeometry>
+const Basic = () => (
+    <WebGPUCanvas>
+        <mesh>
+            <boxGeometry />
+            <primitive attach="material" object={material} />
         </mesh>
-    )
-}
 
+        <OrbitControls />
+        <PerspectiveCamera position={[2, 1, 2]} makeDefault />
+    </WebGPUCanvas>
+)
 
 export default Basic;
