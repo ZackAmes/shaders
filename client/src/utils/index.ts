@@ -1,29 +1,10 @@
-export enum Direction {
-    Left = 1,
-    Right = 2,
-    Up = 3,
-    Down = 4,
+import { vec3 } from "three/examples/jsm/nodes/Nodes"
+interface props {
+        a: number,
+        b: number,
+        c: number
 }
+export const getColor = ( {a, b, c}: props ) => {
 
-export function updatePositionWithDirection(
-    direction: Direction,
-    value: { vec: { x: number; y: number } }
-) {
-    switch (direction) {
-        case Direction.Left:
-            value.vec.x--;
-            break;
-        case Direction.Right:
-            value.vec.x++;
-            break;
-        case Direction.Up:
-            value.vec.y--;
-            break;
-        case Direction.Down:
-            value.vec.y++;
-            break;
-        default:
-            throw new Error("Invalid direction provided");
-    }
-    return value;
+    return vec3(a/255, b/255, c/255)
 }

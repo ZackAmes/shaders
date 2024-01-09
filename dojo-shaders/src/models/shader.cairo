@@ -2,27 +2,32 @@
 struct Shader {
     #[key]
     owner: felt252,
-    color_length: u8,
-    position_length: u8
+    color_one: Vec3,
+    color_two: Vec3
 }
 
-#[derive(Model, Drop, Serde)]
-struct Manager {
-    #[key]
-    manager_type: u8,
-    #[key]
-    index: u8,
-    value: felt252
+#[derive(Copy, Drop, Serde, Introspect)]
+struct Vec3 {
+    a: u8,
+    b: u8,
+    c: u8
 }
 
 #[generate_trait]
-impl ManagerImpl of ManagerTrait {
-    fn color(index: u8, value: felt252) -> Manager{
-        Manager { manager_type: 0, index, value}
+impl ShaderImpl of ShaderTrait {
+    fn basic(owner: felt252 ) -> Shader {
+        Shader {
+            owner, 
+            color_one: Vec3Trait::new(255,0,0),
+            color_two: Vec3Trait::new(0,0,255)
+        }
     }
+}
 
-    fn position(index: u8, value: felt252) -> Manager {
-        Manager {manager_type:1, index, value}
+#[generate_trait]
+impl Vec3Impl of Vec3Trait {
+    fn new(a: u8, b:u8, c:u8) -> Vec3{
+        Vec3 {a,b,c}    
     }
 }
 

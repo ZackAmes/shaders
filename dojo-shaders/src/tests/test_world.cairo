@@ -1,6 +1,8 @@
 #[cfg(test)]
 mod tests {
     use starknet::class_hash::Felt252TryIntoClassHash;
+    use array::ArrayTrait;
+    use core::debug::PrintTrait;
 
     // import world dispatcher
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
@@ -34,5 +36,7 @@ mod tests {
 
         // call spawn()
         actions_system.spawn();
+
+    
     }
 }

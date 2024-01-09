@@ -9,6 +9,5 @@ export function createClientComponents({
     return {
         ...contractComponents,
         Shader: overridableComponent(contractComponents.Shader),
-        Manager: overridableComponent(contractComponents.Manager),
     };
 }

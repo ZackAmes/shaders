@@ -1,28 +1,35 @@
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { MeshBasicNodeMaterial, mix, positionLocal, sin, timerLocal, vec3 } from 'three/examples/jsm/nodes/Nodes.js'
+import { MeshBasicNodeMaterial, mix, positionLocal, sin, timerLocal, vec3, Node as GPUNode, ShaderNodeObject} from 'three/examples/jsm/nodes/Nodes.js'
 import { WebGPUCanvas } from '../Canvas.tsx'
+import { FC } from 'react'
+
+interface BasicProps {
+    color_one: ShaderNodeObject<GPUNode>;
+    color_two: ShaderNodeObject<GPUNode>;
+}
 
 const material = new MeshBasicNodeMaterial()
 
-const red = vec3(1, 0, 0)
-const blue = vec3(0, 0, 1)
-
 const time = timerLocal(0.5)
 
-material.colorNode = mix(red, blue, sin(time))
 
-material.positionNode = positionLocal.add(vec3(0, sin(time).mul(0.2), 0))
+const Basic: FC<BasicProps> = ({color_one, color_two}) => {
 
-const Basic = () => (
-    <WebGPUCanvas>
-        <mesh>
-            <boxGeometry />
-            <primitive attach="material" object={material} />
-        </mesh>
 
-        <OrbitControls />
-        <PerspectiveCamera position={[2, 1, 2]} makeDefault />
-    </WebGPUCanvas>
-)
+
+    material.colorNode = mix(color_one, color_two, sin(time))
+
+    return (
+        <WebGPUCanvas>
+            <mesh>
+                <boxGeometry />
+                <primitive attach="material" object={material} />
+            </mesh>
+
+            <OrbitControls />
+            <PerspectiveCamera position={[2, 1, 2]} makeDefault />
+        </WebGPUCanvas>
+    )
+}
 
 export default Basic;
