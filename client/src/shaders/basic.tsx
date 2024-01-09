@@ -1,21 +1,19 @@
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { MeshBasicNodeMaterial, mix, positionLocal, sin, timerLocal, vec3, Node as GPUNode, ShaderNodeObject} from 'three/examples/jsm/nodes/Nodes.js'
+import { MeshBasicNodeMaterial, mix, sin, timerLocal, Node as GPUNode, ShaderNodeObject} from 'three/examples/jsm/nodes/Nodes.js'
 import { WebGPUCanvas } from '../WebGPUCanvas.tsx'
 import { FC } from 'react'
 
 interface BasicProps {
-    color_one: ShaderNodeObject<GPUNode>;
-    color_two: ShaderNodeObject<GPUNode>;
+    color: GPUNode
 }
 
 const material = new MeshBasicNodeMaterial()
 
-const time = timerLocal(0.5)
 
 
-const Basic: FC<BasicProps> = ({color_one, color_two}) => {
+const Basic: FC<BasicProps> = ({color}) => {
 
-    material.colorNode = mix(color_one, color_two, sin(time))
+    material.colorNode = color;
 
     return (
         <WebGPUCanvas>
