@@ -3,6 +3,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import WebGPUCapabilities from 'three/examples/jsm/capabilities/WebGPU.js'
 import WebGPURenderer from 'three/examples/jsm/renderers/webgpu/WebGPURenderer.js'
+import { Physics } from '@react-three/rapier'
 
 const UnsupportedNoticeWrapper = styled.div`
     position: absolute;
@@ -49,7 +50,9 @@ export const WebGPUCanvas = ({ children, webglFallback = true, ...props }: React
             }}
             {...props}
         >
-            {children}
+            <Physics>
+                {children}
+            </Physics>
         </Canvas>
     )
 }
