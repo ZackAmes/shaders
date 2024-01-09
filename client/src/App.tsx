@@ -1,19 +1,15 @@
 import { useComponentValue } from "@dojoengine/react";
-import { Entity, getComponentValue } from "@dojoengine/recs";
-import { useEffect, useState } from "react";
+import { Entity } from "@dojoengine/recs";
 import { useDojo } from "./DojoContext";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { Canvas } from "@react-three/fiber";
-import { OrthographicCamera } from "@react-three/drei";
 import Basic from "./shaders/basic";
-import { shortString } from "starknet";
-import { getColor } from "./utils";
+import { vec3 } from "three/examples/jsm/nodes/Nodes";
 
 function App() {
     const {
         setup: {
             systemCalls: { spawn },
-            components: { Shader},
+            components: { Shader },
         },
         account: {
             create,
@@ -31,14 +27,11 @@ function App() {
 
     // get current component values
     const shader = useComponentValue(Shader, entityId);
-    console.log(shader);
-    let color_vec: {a: number, b:number, c:number} = shader ? shader.color_one : {a:0, b:0, c:0}; 
-    let color_one = getColor(color_vec);
-    color_vec = shader ? shader.color_two : {a:0, b:0, c:0}; 
+    let vec: {a: number, b:number, c:number} = shader ? shader.color_one : {a:0, b:0, c:0}; 
+    let color_one = vec3(vec.a/255, vec.b/255, vec.c/255 );
+    vec = shader ? shader.color_two : {a:0, b:0, c:0}; 
 
-    let color_two = getColor(color_vec);
-    console.log(color_one);
-
+    let color_two = vec3(vec.a/255, vec.b/255, vec.c/255 );
 
     
     return (
