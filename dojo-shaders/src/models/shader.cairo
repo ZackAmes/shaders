@@ -1,3 +1,4 @@
+
 #[derive(Model, Drop, Serde)]
 struct Shader {
     #[key]
