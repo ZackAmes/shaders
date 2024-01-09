@@ -2,7 +2,28 @@
 struct Shader {
     #[key]
     owner: felt252,
-    color: Mix
+    vertex_length: u8,
+    frag_length: u8
+}
+
+#[derive(Model, Drop, Serde)]
+struct Manager {
+    #[key]
+    manager_type: u8,
+    #[key]
+    index: u8,
+    value: felt252
+}
+
+#[generate_trait]
+impl ManagerImpl of ManagerTrait {
+    fn vertex(index: u8, value: felt252) -> Manager{
+        Manager { manager_type: 0, index, value}
+    }
+
+    fn frag(index: u8, value: felt252) -> Manager {
+        Manager {manager_type:1, index, value}
+    }
 }
 
 #[derive(Copy, Drop, Serde, Introspect)]
@@ -12,28 +33,12 @@ struct Vec3 {
     c: u8
 }
 
-#[derive(Copy, Drop, Serde, Introspect)]
-struct Mix {
-    color_one: Vec3,
-    color_two: Vec3,
-    condition: u8
-}
-
 //condition = 0 for sin(t) for now
-
-
 
 #[generate_trait]
 impl ShaderImpl of ShaderTrait {
     fn basic(owner: felt252 ) -> Shader {
-        Shader {
-            owner, 
-            color: Mix {
-                color_one: Vec3Trait::new(255,0,0),
-                color_two: Vec3Trait::new(0,0,255),
-                condition: 0
-            }
-        }
+        Shader { owner, vertex_length:0, frag_length:0}
     }
 }
 

@@ -1,4 +1,4 @@
-import { vec3, mix, sin, timerLocal } from "three/examples/jsm/nodes/Nodes";
+import { vec3, mix, sin, timerLocal, uniform } from "three/examples/jsm/nodes/Nodes";
 
 export const MixNode = (shader: any) => {
 
@@ -10,7 +10,7 @@ export const MixNode = (shader: any) => {
 
     let color_two = vec3(vec.a/255, vec.b/255, vec.c/255 );
 
-    let color = mix(color_one, color_two, sin(time))
-    return color;
+    return mix(color_one, color_two, sin(time));
+   // return uniform(color_one)
 }
 

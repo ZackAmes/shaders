@@ -1,37 +1,39 @@
 import { OrbitControls, PerspectiveCamera, Box } from '@react-three/drei'
-import { MeshBasicNodeMaterial, mix, sin, timerLocal, Node as GPUNode, ShaderNodeObject} from 'three/examples/jsm/nodes/Nodes.js'
+import { MeshBasicNodeMaterial, uv, sub,mul, length, Node as GPUNode, ShaderNodeObject, vec3} from 'three/examples/jsm/nodes/Nodes.js'
 import { WebGPUCanvas } from '../WebGPUCanvas.tsx'
 import { FC } from 'react'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 
 interface BasicProps {
-    color: GPUNode
 }
 
 const material = new MeshBasicNodeMaterial()
 
 
 
-const Basic: FC<BasicProps> = ({color}) => {
+const Basic: FC<BasicProps> = ({}) => {
 
-    material.colorNode = color;
+    let red = vec3(1,0,0)
+    let blue = vec3(0,0,1)
+    let uv0 = uv()
+    console.log(uv0.xy)
+    let colorNode = parseInt(length(uv0).toString()) > 0 ? red : blue; 
+    material.colorNode = colorNode
+    console.log(material.fragmentShader )
+    console.log(material.vertexShader)
+
+
 
     return (
         <WebGPUCanvas>
-            <Box rotation={[0, 0,0]} args={[30, 1, 30]}>
-                        <CuboidCollider rotation={[0, 0,0]} args={[15,.5,15]}/>
-                        <meshBasicMaterial color="grey"/>
-            </Box>
 
-            <RigidBody>
                 <mesh>
-                    <boxGeometry />
+                    <planeGeometry args={[3,3]}/>
                     <primitive attach="material" object={material} />
                 </mesh>
-            </RigidBody>
 
             <OrbitControls />
-            <PerspectiveCamera position={[2, 1, 2]} makeDefault />
+            <PerspectiveCamera position={[2, 3, 4]} makeDefault />
         </WebGPUCanvas>
     )
 }
