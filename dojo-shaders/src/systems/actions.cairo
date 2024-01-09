@@ -49,14 +49,27 @@ mod actions {
 
             let mut shader = get!(world, owner, Shader);
             let mut i = 0;
-            loop {
-                if(i == color_data_len) {break;};
-                    let data = *color.data.at(i).into();
-                    let manager = ManagerTrait::color(i.try_into().unwrap(), data.into());
-                    shader.color_length+=1;
-                    set!(world, (manager));
-                i+=1;
-            };
+
+            let data = *color.pending_word;
+            let manager = ManagerTrait::color(i.try_into().unwrap(), data);
+            shader.color_length+=1;
+            set!(world, (manager));
+
+            let data = *position.pending_word;
+            let manager = ManagerTrait::position(i.try_into().unwrap(), data);
+            shader.position_length+=1;
+            set!(world, (manager));
+
+            if(color_data_len > 0){
+                loop {
+                    if(i == color_data_len) {break;};
+                        let data = *color.data.at(i).into();
+                        let manager = ManagerTrait::color(i.try_into().unwrap(), data.into());
+                        shader.color_length+=1;
+                        set!(world, (manager));
+                    i+=1;
+                };
+                }
 
             loop {
                 if(i == position_data_len) {break;};

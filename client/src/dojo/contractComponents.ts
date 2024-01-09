@@ -3,39 +3,32 @@
 import { defineComponent, Type as RecsType, World } from "@dojoengine/recs";
 
 export function defineContractComponents(world: World) {
-    return {
-        Moves: (() => {
-            return defineComponent(
-                world,
-                {
-                    player: RecsType.BigInt,
-                    remaining: RecsType.Number,
-                    last_direction: RecsType.Number,
-                },
-                {
-                    metadata: {
-                        name: "Moves",
-                        types: ["contractaddress", "u8", "enum"],
-                        customTypes: ["Direction"],
-                    },
-                }
-            );
-        })(),
-        Position: (() => {
-            return defineComponent(
-                world,
-                {
-                    player: RecsType.BigInt,
-                    vec: { x: RecsType.Number, y: RecsType.Number },
-                },
-                {
-                    metadata: {
-                        name: "Position",
-                        types: ["contractaddress", "u32", "u32"],
-                        customTypes: ["Vec2"],
-                    },
-                }
-            );
-        })(),
-    };
+  return {
+	  Manager: (() => {
+	    return defineComponent(
+	      world,
+	      { manager_type: RecsType.Number, index: RecsType.Number, value: RecsType.BigInt },
+	      {
+	        metadata: {
+	          name: "Manager",
+	          types: ["u8","u8","felt252"],
+	          customTypes: [],
+	        },
+	      }
+	    );
+	  })(),
+	  Shader: (() => {
+	    return defineComponent(
+	      world,
+	      { owner: RecsType.BigInt, color_length: RecsType.Number, position_length: RecsType.Number },
+	      {
+	        metadata: {
+	          name: "Shader",
+	          types: ["felt252","u8","u8"],
+	          customTypes: [],
+	        },
+	      }
+	    );
+	  })(),
+  };
 }
