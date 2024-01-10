@@ -4,6 +4,7 @@ mod systems {
 
 mod models {
     mod shader;
+    mod sdf;
 }
 
 mod tests {
