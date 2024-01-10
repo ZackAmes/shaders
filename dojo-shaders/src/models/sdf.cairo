@@ -1,5 +1,7 @@
 use cubit::f64::types::fixed::{Fixed, FixedTrait};
 
+use dojo_shaders::models::node::{Node, Float};
+
 #[derive(Model, Drop, Serde)]
 struct Sdf{
     #[key]
@@ -7,21 +9,11 @@ struct Sdf{
     val: Float
 }
 
-#[derive(Drop, Copy, Serde, Introspect)]
-struct Float{
-    mag: u64,
-    sign: bool
-}
-
 #[generate_trait]
-impl FloatImpl of FloatTrait {
-
-    fn new(mag: u64, sign: bool) -> Float {
-        Float{mag, sign}
+impl SdfImpl of SdfTrait {
+    fn new(owner: felt252, val: Float) -> Sdf {
+        Sdf {owner, val}
     }
-
-    fn toFixed(self: Float) -> Fixed {
-        FixedTrait::new(self.mag, self.sign)
-    }
-
 }
+
+

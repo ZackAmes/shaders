@@ -1,23 +1,29 @@
-use cubit::types::fixed::{Fixed, FixedTrait, ONE_u128};
-use cubit::types::vec3::{Vec3, Vec3Trait};
-use cubit::types::vec2::{Vec2, Vec2Trait};
+use cubit::f64::types::fixed::{Fixed, FixedTrait, ONE_u128};
 
-#[derive(Model, Drop, Serde)]
-struct Node {
-    #[key]
-    id: u32,
-   // value: NodeValue
-   value: u8
+#[derive(Drop)]
+enum Node {
+    None,
+    Length: Node,
+    Add: (Node, Node),
+    Sub: (Node, Node),
+    Float: Float
 }
 
+#[derive(Drop, Copy, Serde, Introspect)]
+struct Float{
+    mag: u64,
+    sign: bool
+}
 
-#[derive(Drop, Introspect, Serde)]
-enum NodeValue {
-    add: (u32, u32),
-    sub: (u32, u32),
-    length: u32,
-    vec3: Vec3,
-    vec2: Vec2,
-    float: Fixed
+#[generate_trait]
+impl FloatImpl of FloatTrait {
+
+    fn new(mag: u64, sign: bool) -> Float {
+        Float{mag, sign}
+    }
+
+    fn toFixed(self: Float) -> Fixed {
+        FixedTrait::new(self.mag, self.sign)
+    }
 
 }
