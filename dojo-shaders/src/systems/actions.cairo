@@ -10,9 +10,10 @@ mod actions {
     use super::IActions;
 
     use starknet::{ContractAddress, get_caller_address};
-    use core::byte_array::{ByteArrayStringLiteral};
-    use core::bytes_31::{Bytes31IntoFelt252};
     use dojo_shaders::models::shader::{Shader, ShaderTrait};
+    use dojo_shaders::models::sdf::{Sdf, SdfTrait,  Shape};
+    use dojo_shaders::models::node::{Node, Float};
+    use cubit::f64::types::{fixed::{Fixed, FixedTrait}, vec2::{Vec2, Vec2Trait} };
 
     
 
@@ -28,8 +29,9 @@ mod actions {
             let caller:felt252 = get_caller_address().into();
 
             let shader = ShaderTrait::red(caller);
+            let sdf = SdfTrait::circle(caller);
 
-            set!(world, (shader));
+            set!(world, (shader, sdf));
 
             
         }
@@ -38,6 +40,6 @@ mod actions {
 
     #[generate_trait]
     impl Private of PrivateTrait {
-        
+
     }
 }

@@ -1,12 +1,26 @@
 use cubit::f64::types::fixed::{Fixed, FixedTrait, ONE_u128};
 
-#[derive(Drop)]
+#[derive(Drop, Copy)]
 enum Node {
-    None,
-    Length: Node,
     Add: (Node, Node),
-    Sub: (Node, Node),
-    Float: Float
+    Float: Fixed
+}
+
+#[generate_trait]
+impl NodeImpl of NodeTrait {
+    fn eval(ref self: Node) -> Fixed {
+        match self {
+            Node::Add((x,y)) => {
+                let mut a = x;
+                let mut b = y;
+                let res = a.eval() + b.eval();
+                res
+            },
+            Node::Float(f) => {
+                f
+            } 
+        }
+    }
 }
 
 #[derive(Drop, Copy, Serde, Introspect)]

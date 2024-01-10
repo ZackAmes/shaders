@@ -13,8 +13,11 @@ mod tests {
     // import test utils
     use dojo_shaders::{
         systems::{actions::{actions, IActionsDispatcher, IActionsDispatcherTrait}},
-        models::{shader::{shader, Shader}}
+        models::{shader::{shader, Shader}, sdf::{sdf, Sdf, Shape}, node::{Node, NodeTrait, NodeImpl, Float}}
     };
+
+
+    use cubit::f64::types::{fixed::{Fixed, FixedTrait, ONE}, vec2::{Vec2, Vec2Trait} };
 
 
     #[test]
@@ -38,8 +41,18 @@ mod tests {
         actions_system.spawn();
 
         let shader = get!(world, caller, Shader);
-
-
     
+    }
+
+    #[test]
+    #[available_gas(30000000)]
+    fn test_node() {
+        let a = FixedTrait::new( ONE, true);
+        let b = FixedTrait::new( 3 * ONE, true);
+
+        let b_mag = b.mag;
+        println!("{b_mag}");
+
+        let mut node = Node::Add((Node::Float(a), Node::Float(b)));
     }
 }

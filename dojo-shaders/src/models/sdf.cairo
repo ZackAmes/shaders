@@ -6,14 +6,21 @@ use dojo_shaders::models::node::{Node, Float};
 struct Sdf{
     #[key]
     owner: felt252,
-    val: Float
+    shape: Shape
+}
+
+#[derive(Drop, Copy, Serde, Introspect)]
+enum Shape {
+    Circle
 }
 
 #[generate_trait]
 impl SdfImpl of SdfTrait {
-    fn new(owner: felt252, val: Float) -> Sdf {
-        Sdf {owner, val}
+    fn circle(owner: felt252) -> Sdf {
+        Sdf {owner, shape: Shape::Circle}
     }
 }
+
+
 
 
