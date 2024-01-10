@@ -1,16 +1,30 @@
-import { vec3, mix, sin, timerLocal, uniform } from "three/examples/jsm/nodes/Nodes";
+import { getComponentValue } from "@dojoengine/recs";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { shortString } from "starknet";
 
-export const MixNode = (shader: any) => {
+export const getShader = (manager: any, vertex_length: number, frag_length:number) => {
+    let vertex_shader = "";
+    let frag_shader = "";
 
-    let vec: {a: number, b:number, c:number} = shader ? shader.color.color_one : {a:0, b:0, c:0}; 
-    let color_one = vec3(vec.a/255, vec.b/255, vec.c/255 );
-    vec = shader ? shader.color.color_two : {a:0, b:0, c:0};
-    
-    const time = timerLocal(0.5)
 
-    let color_two = vec3(vec.a/255, vec.b/255, vec.c/255 );
+    for(let i = 0; i < vertex_length; i++) {
+        let vertex_manager_id = getEntityIdFromKeys([BigInt(0), BigInt(i)])
+        let value = getComponentValue(manager, vertex_manager_id)
+        console.log(value)
+        let string = value ? shortString.decodeShortString(value.value) : ""
+        console.log(string)
+        vertex_shader += string;
+    }
+    for(let i = 0; i < frag_length; i++) {
+        let frag_manager_id = getEntityIdFromKeys([BigInt(1), BigInt(i)])
+        let value = getComponentValue(manager, frag_manager_id)
+        let string = value ? shortString.decodeShortString(value.value) : ""
+        frag_shader += string;
+    }
 
-    return mix(color_one, color_two, sin(time));
-   // return uniform(color_one)
+
+
+    return {vertex_shader, frag_shader}
+
 }
 

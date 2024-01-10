@@ -13,7 +13,7 @@ mod tests {
     // import test utils
     use dojo_shaders::{
         systems::{actions::{actions, IActionsDispatcher, IActionsDispatcherTrait}},
-        models::{shader::{shader, Shader, manager, Manager}}
+        models::{shader::{shader, Shader}}
     };
 
 
@@ -24,7 +24,7 @@ mod tests {
         let caller = starknet::contract_address_const::<0x0>();
 
         // models
-        let mut models = array![shader::TEST_CLASS_HASH, manager::TEST_CLASS_HASH];
+        let mut models = array![shader::TEST_CLASS_HASH];
 
         // deploy world with models
         let world = spawn_test_world(models);
@@ -38,8 +38,7 @@ mod tests {
         actions_system.spawn();
 
         let shader = get!(world, caller, Shader);
-        let vertex_length = shader.vertex_length;
-        println!("vertex shader has {vertex_length} felts")
+
 
     
     }

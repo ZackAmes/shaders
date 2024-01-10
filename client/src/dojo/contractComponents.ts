@@ -7,12 +7,12 @@ export function defineContractComponents(world: World) {
 	  Shader: (() => {
 	    return defineComponent(
 	      world,
-	      { owner: RecsType.BigInt, color: { color_one: { a: RecsType.Number, b: RecsType.Number, c: RecsType.Number }, color_two: { a: RecsType.Number, b: RecsType.Number, c: RecsType.Number }, condition: RecsType.Number } },
+	      { owner: RecsType.BigInt, color: { a: RecsType.Number, b: RecsType.Number, c: RecsType.Number } },
 	      {
 	        metadata: {
 	          name: "Shader",
-	          types: ["felt252","u8","u8","u8","u8","u8","u8","u8"],
-	          customTypes: ["Mix","Vec3","Vec3"],
+	          types: ["felt252","u8","u8","u8"],
+	          customTypes: ["Vec3"],
 	        },
 	      }
 	    );
