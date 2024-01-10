@@ -1,5 +1,5 @@
 import { OrbitControls, PerspectiveCamera, Box } from '@react-three/drei'
-import { MeshBasicNodeMaterial, ShaderNodeObject,mul,cond, Node, sub, vec2, vec3, positionLocal, uv, length, greaterThan} from 'three/examples/jsm/nodes/Nodes.js'
+import { MeshBasicNodeMaterial, ShaderNodeObject,mul,cond,mix,smoothstep, Node, sub,cos,add, vec3,exp, abs, positionLocal, length} from 'three/examples/jsm/nodes/Nodes.js'
 import { WebGPUCanvas } from '../WebGPUCanvas.tsx'
 import { FC } from 'react'
 
@@ -20,8 +20,13 @@ const Basic: FC<BasicProps> = ({color}) => {
     let uv0 = positionLocal;
     let d = sd(uv0.xy, .5);
 
-    material.colorNode = cond(d.greaterThan(0), mul(d , color), vec3(0,0,1));
+    let col = cond(d.greaterThan(0), color, color.zyx);
+    col = col.mul(sub(1, exp(mul(-6, abs(d)))));
+    col = col.mul(add( .8, mul(.2, cos(mul(150,d)))));
 
+    col = mix( col, vec3(1.0), sub(1,smoothstep(0.0,0.01,abs(d))) );
+
+    material.colorNode = col
     return (
         <WebGPUCanvas>
 
