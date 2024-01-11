@@ -34,22 +34,46 @@ mod actions {
             let a: Float = FloatTrait::new(4,true);
             let node_type = NodeType::Float;
             let args = ArgsTrait::float(a);
-            let mut node = Node{id: world.uuid(), node_type, args};
+            let b: Float = FloatTrait::new(2,true);
+
+            let mut f1_node = Node{id: world.uuid(), node_type, args};
+            let mut f2_node = Node{id: world.uuid(), node_type, args: ArgsTrait::float(b)};
             
-            let res = a.mag;
+            let add_type = NodeType::Add;
+            let add_args = ArgsTrait::add(f1_node.id, f2_node.id);
+
+            let mut add_node = Node {id: world.uuid(), node_type: add_type, args: add_args};
+
+            let res = self.eval_node(ref add_node);
             println!("{res}");
 
-
-            set!(world, (shader, sdf, node));
+            set!(world, (shader, sdf, f1_node, f2_node, add_node));
 
             
         }
 
-        
-
+    
     }
 
     #[generate_trait]
     impl Private of PrivateTrait {
+
+        fn eval_node(self: @ContractState, ref node: Node) -> u8 {
+            let mut res = 0;
+
+            match node.node_type {
+                NodeType::Float => {
+                    res = 1;
+                },
+
+                NodeType::Add => {
+                    res = 2;
+                }
+            }
+
+            res
+        }
+
+
     }
 }
