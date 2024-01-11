@@ -13,7 +13,7 @@ mod tests {
     // import test utils
     use dojo_shaders::{
         systems::{actions::{actions, IActionsDispatcher, IActionsDispatcherTrait}},
-        models::{shader::{shader, Shader}, sdf::{sdf, Sdf, Shape}, node::{Node, Float, FloatTrait}}
+        models::{shader::{shader, Shader}, sdf::{sdf, Sdf, SdfTrait}, node::{Node, Float, FloatTrait}}
     };
 
 
