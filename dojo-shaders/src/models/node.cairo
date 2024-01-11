@@ -12,7 +12,7 @@ struct Node {
 enum NodeType {
     Float,
     Add,
-
+    Sub
 }
 
 #[derive(Drop, Copy, Serde, Introspect)]
@@ -55,5 +55,7 @@ impl FloatImpl of FloatTrait {
     fn toFixed(self: Float) -> Fixed {
         FixedTrait::new(self.mag, self.sign)
     }
+
+
 
 }

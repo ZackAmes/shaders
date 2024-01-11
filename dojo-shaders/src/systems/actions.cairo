@@ -49,9 +49,15 @@ mod actions {
 
             let mut add_node = Node {id: world.uuid(), node_type: add_type, args: add_args};
 
-            let sdf = SdfTrait::new(caller, add_node.id);
 
-            set!(world, (shader, sdf, f1_node, f2_node, add_node));
+            let sub_type = NodeType::Sub;
+            let sub_args = ArgsTrait::add(f1_node.id, f2_node.id);
+
+            let mut sub_node = Node {id: world.uuid(), node_type: sub_type, args: sub_args};
+
+            let sdf = SdfTrait::new(caller, sub_node.id);
+
+            set!(world, (shader, sdf, f1_node, f2_node, sub_node, add_node));
 
             
         }
@@ -76,7 +82,23 @@ mod actions {
 
                     x+y
 
+                },
+
+                NodeType::Sub => {
+                    let node_one_id: u32 = node.args.a.mag.try_into().unwrap();
+                    let node_two_id: u32 = node.args.b.mag.try_into().unwrap();
+
+                    let x: Fixed = self.eval_node_fixed(node_one_id);
+                    let x_mag = x.mag;
+                    println!("{x_mag}");
+                    let y: Fixed = self.eval_node_fixed(node_two_id);
+
+                    let y_mag = y.mag;
+                    println!("{y_mag}");
+
+                    x-y
                 }
+
             }
         }
 
