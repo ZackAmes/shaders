@@ -1,4 +1,4 @@
-use cubit::f64::types::{vec2::{Vec2, Vec2Trait}, fixed::{Fixed, FixedTrait}}
+use cubit::f64::types::{vec2::{Vec2, Vec2Trait}, fixed::{Fixed, FixedTrait}};
 
 mod shapes {
 

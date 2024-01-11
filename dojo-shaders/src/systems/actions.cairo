@@ -12,7 +12,7 @@ mod actions {
     use starknet::{ContractAddress, get_caller_address};
     use dojo_shaders::models::shader::{Shader, ShaderTrait};
     use dojo_shaders::models::sdf::{Sdf, SdfTrait,  Shape};
-    use dojo_shaders::models::node::{Node, Float};
+    use dojo_shaders::models::node::{Node, NodeType, Float, FloatTrait, FloatImpl, FloatVec3, FloatVec3Trait};
     use cubit::f64::types::{fixed::{Fixed, FixedTrait}, vec2::{Vec2, Vec2Trait} };
 
     
@@ -31,15 +31,24 @@ mod actions {
             let shader = ShaderTrait::red(caller);
             let sdf = SdfTrait::circle(caller);
 
-            set!(world, (shader, sdf));
+            let a: Float = FloatTrait::new(4,true);
+            let node_type = NodeType::Float(FloatVec3Trait::float(a));
+            let mut node = Node{id: world.uuid(), node_type};
+            
+            let res = a.mag;
+            println!("{res}");
+
+
+            set!(world, (shader, sdf, node));
 
             
         }
+
+        
 
     }
 
     #[generate_trait]
     impl Private of PrivateTrait {
-
     }
 }

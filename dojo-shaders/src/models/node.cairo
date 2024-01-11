@@ -1,26 +1,25 @@
-use cubit::f64::types::fixed::{Fixed, FixedTrait, ONE_u128};
+use cubit::f64::types::fixed::{Fixed, FixedTrait, ONE};
 
-#[derive(Drop, Copy)]
-enum Node {
-    Add: (Node, Node),
-    Float: Fixed
+#[derive(Model, Drop, Serde)]
+struct Node {
+    #[key]
+    id: u32,
+    node_type: NodeType
 }
 
-#[generate_trait]
-impl NodeImpl of NodeTrait {
-    fn eval(ref self: Node) -> Fixed {
-        match self {
-            Node::Add((x,y)) => {
-                let mut a = x;
-                let mut b = y;
-                let res = a.eval() + b.eval();
-                res
-            },
-            Node::Float(f) => {
-                f
-            } 
-        }
-    }
+#[derive(Drop, Copy, Serde, Introspect)]
+enum NodeType {
+    Float: FloatVec3,
+    Add: FloatVec3,
+
+}
+
+#[derive(Drop, Copy, Serde, Introspect)]
+enum Args {
+    None,
+    One,
+    Two,
+    Three
 }
 
 #[derive(Drop, Copy, Serde, Introspect)]
@@ -29,11 +28,32 @@ struct Float{
     sign: bool
 }
 
+
+#[derive(Copy, Drop, Serde, Introspect)]
+struct FloatVec3 {
+    args: Args,
+    a: Float,
+    b: Float,
+    c: Float
+}
+
+#[generate_trait]
+impl floatvec3Impl of FloatVec3Trait {
+    fn float(f: Float) -> FloatVec3 {
+        let args = Args::One;
+        return FloatVec3 {args, a:f, b:FloatTrait::zero(), c:FloatTrait::zero()};
+    }
+}
+
 #[generate_trait]
 impl FloatImpl of FloatTrait {
 
     fn new(mag: u64, sign: bool) -> Float {
         Float{mag, sign}
+    }
+
+    fn zero() -> Float {
+        Float{mag:0, sign:true}
     }
 
     fn toFixed(self: Float) -> Fixed {
