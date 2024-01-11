@@ -12,7 +12,7 @@ mod actions {
     use starknet::{ContractAddress, get_caller_address};
     use dojo_shaders::models::shader::{Shader, ShaderTrait};
     use dojo_shaders::models::sdf::{Sdf, SdfTrait,  Shape};
-    use dojo_shaders::models::node::{Node, NodeType, Float, FloatTrait, FloatImpl, FloatVec3, FloatVec3Trait};
+    use dojo_shaders::models::node::{Node, NodeType, Float, FloatTrait, FloatImpl, Args, ArgsTrait};
     use cubit::f64::types::{fixed::{Fixed, FixedTrait}, vec2::{Vec2, Vec2Trait} };
 
     
@@ -32,8 +32,9 @@ mod actions {
             let sdf = SdfTrait::circle(caller);
 
             let a: Float = FloatTrait::new(4,true);
-            let node_type = NodeType::Float(FloatVec3Trait::float(a));
-            let mut node = Node{id: world.uuid(), node_type};
+            let node_type = NodeType::Float;
+            let args = ArgsTrait::float(a);
+            let mut node = Node{id: world.uuid(), node_type, args};
             
             let res = a.mag;
             println!("{res}");

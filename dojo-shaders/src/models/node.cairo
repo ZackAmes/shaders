@@ -4,22 +4,15 @@ use cubit::f64::types::fixed::{Fixed, FixedTrait, ONE};
 struct Node {
     #[key]
     id: u32,
-    node_type: NodeType
+    node_type: NodeType,
+    args: Args
 }
 
 #[derive(Drop, Copy, Serde, Introspect)]
 enum NodeType {
-    Float: FloatVec3,
-    Add: FloatVec3,
+    Float,
+    Add,
 
-}
-
-#[derive(Drop, Copy, Serde, Introspect)]
-enum Args {
-    None,
-    One,
-    Two,
-    Three
 }
 
 #[derive(Drop, Copy, Serde, Introspect)]
@@ -30,18 +23,21 @@ struct Float{
 
 
 #[derive(Copy, Drop, Serde, Introspect)]
-struct FloatVec3 {
-    args: Args,
+struct Args {
     a: Float,
     b: Float,
     c: Float
 }
 
 #[generate_trait]
-impl floatvec3Impl of FloatVec3Trait {
-    fn float(f: Float) -> FloatVec3 {
-        let args = Args::One;
-        return FloatVec3 {args, a:f, b:FloatTrait::zero(), c:FloatTrait::zero()};
+impl ArgsImpl of ArgsTrait {
+    fn float(f: Float) -> Args {
+        return Args {a:f, b:FloatTrait::zero(), c:FloatTrait::zero()};
+    }
+    fn add(x: u32, y: u32) -> Args {
+        let a = FloatTrait::new(x.into(), true);
+        let b = FloatTrait::new(y.into(), true);
+        return Args {a, b, c:FloatTrait::zero()};
     }
 }
 
