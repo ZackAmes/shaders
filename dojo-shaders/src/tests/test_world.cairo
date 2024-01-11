@@ -21,7 +21,7 @@ mod tests {
 
 
     #[test]
-    #[available_gas(30000000)]
+    #[available_gas(30000000000)]
     fn test_move() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
@@ -41,6 +41,14 @@ mod tests {
         actions_system.spawn();
 
         let shader = get!(world, caller, Shader);
+        let sdf = get!(world, caller, Sdf);
+
+        let root = sdf.root_id;
+
+        let res = actions_system.eval_node_fixed(root);
+        let res_mag = res.mag;
+
+        println!("res: {res_mag}");
     
     }
 

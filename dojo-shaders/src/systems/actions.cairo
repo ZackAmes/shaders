@@ -1,7 +1,9 @@
+use cubit::f64::types::fixed::{Fixed};
 
 #[starknet::interface]
 trait IActions<TContractState> {
     fn spawn(self: @TContractState);
+    fn eval_node_fixed(self: @TContractState, node_id: u32) -> Fixed;
 }
 
 // dojo decorator
@@ -54,14 +56,9 @@ mod actions {
             
         }
 
-    
-    }
-
-    #[generate_trait]
-    impl Private of PrivateTrait {
-
-        fn eval_node_fixed(self: @ContractState, ref node: Node) -> Fixed {
+        fn eval_node_fixed(self: @ContractState, node_id: u32) -> Fixed {
             let world = self.world_dispatcher.read();
+            let mut node = get!(world, node_id, Node);
 
             match node.node_type {
                 NodeType::Float => {
@@ -69,20 +66,27 @@ mod actions {
                 },
 
                 NodeType::Add => {
-                    let node_one_id = node.args.a.mag;
-                    let node_two_id = node.args.b.mag;
-                    let mut node_one = get!(world, node_one_id, Node);
-                    let mut node_two = get!(world, node_two_id, Node);
-                    let x: Fixed = self.eval_node_fixed(ref node_one);
+                    let node_one_id: u32 = node.args.a.mag.try_into().unwrap();
+                    let node_two_id: u32 = node.args.b.mag.try_into().unwrap();
+
+                    let x: Fixed = self.eval_node_fixed(node_one_id);
                     let x_mag = x.mag;
                     println!("{x_mag}");
-                    let y: Fixed = self.eval_node_fixed(ref node_two);
+                    let y: Fixed = self.eval_node_fixed(node_two_id);
 
                     x+y
 
                 }
             }
         }
+
+    
+    }
+
+    #[generate_trait]
+    impl Private of PrivateTrait {
+
+        
 
 
     }
