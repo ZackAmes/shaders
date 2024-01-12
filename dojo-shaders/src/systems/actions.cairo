@@ -85,10 +85,15 @@ mod actions {
                 },
                 //operations
                 NodeType::Add => {
-                    let mut a = get!(world, node.args.a, Node);
-                    let mut b = get!(world, node.args.a, Node);
+                    let mut a = get!(world, node.args.a.mag, Node);
+                    let mut b = get!(world, node.args.b.mag, Node);
+
                     let mut a_args = a.args;
                     let mut b_args = b.args;
+
+                    let a_mag = a_args.a.mag;
+                    let b_mag = b_args.a.mag;
+                    println!("a: {a_mag} b: {b_mag}");
                     
                     if(!a.is_base()) {
                         a = self.eval_node(a.id);

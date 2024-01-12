@@ -56,9 +56,10 @@ mod tests {
 
         let root_type = root.node_type;
         let root_args_type = root.args.args_type;
+        let res = root.args.a.mag;
 
         println!("type: {root_type}, args_type: {root_args_type}");
-
+        println!("res: {res}");
 
 
         
