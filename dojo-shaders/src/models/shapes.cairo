@@ -6,7 +6,7 @@ mod shapes {
 
     fn circle(p: Vec2, r: Fixed) -> Node{
 
-        Node::Sub ( Node.Length(p), Node.Float(r));
+        Node::Sub ( Node::Length(p), Node::Float(r));
 
     }
 }

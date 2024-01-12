@@ -45,10 +45,7 @@ mod tests {
 
         let root = sdf.root_id;
 
-        let res = actions_system.eval_node_fixed(root);
-        let res_mag = res.mag;
-
-        println!("res: {res_mag}");
+        println!("root: {root}");
     
     }
 

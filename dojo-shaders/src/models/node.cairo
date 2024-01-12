@@ -1,4 +1,6 @@
 use cubit::f64::types::fixed::{Fixed, FixedTrait, ONE};
+use cubit::f64::types::vec2::{Vec2, Vec2Trait};
+use cubit::f64::types::vec3::{Vec3, Vec3Trait};
 
 #[derive(Model, Drop, Serde)]
 struct Node {
@@ -8,11 +10,36 @@ struct Node {
     args: Args
 }
 
+#[generate_trait]
+impl NodeImpl of NodeTrait {
+    fn fixed(id: u32, value: Fixed) -> Node {
+        let node_type = NodeType::Fixed;
+        let args = ArgsTrait::fixed(value);
+        Node { id, node_type, args}
+    }
+}
+
 #[derive(Drop, Copy, Serde, Introspect)]
 enum NodeType {
-    Float,
+    Fixed,
+    Vec2,
+    Vec3,
     Add,
-    Sub
+    Sub,
+    Length
+}
+
+impl NodeTypeIntoFelt252 of Into<NodeType, felt252> {
+    fn into(self: NodeType) -> felt252 {
+        match self {
+            NodeType::Fixed => 0,
+            NodeType::Vec2 => 1,
+            NodeType::Vec3 => 2,
+            NodeType::Add => 3,
+            NodeType::Sub => 4,
+            NodeType::Length => 5
+        }
+    }
 }
 
 #[derive(Drop, Copy, Serde, Introspect)]
@@ -21,8 +48,28 @@ struct Float{
     sign: bool
 }
 
+#[derive(Drop, Copy, Serde, Introspect)]
+enum ArgsType {
+    Fixed,
+    Vec2,
+    Vec3,
+    Position
+}
+
+impl ArgsTypeIntoFelt252 of Into<ArgsType, felt252> {
+    fn into(self: ArgsType) -> felt252 {
+        match self {
+            ArgsType::Fixed => 0,
+            ArgsType::Vec2 => 1,
+            ArgsType::Vec3 => 2,
+            ArgsType::Position => 3,
+        }
+    }
+}
+
 #[derive(Copy, Drop, Serde, Introspect)]
 struct Args {
+    args_type: ArgsType,
     a: Float,
     b: Float,
     c: Float
@@ -30,13 +77,17 @@ struct Args {
 
 #[generate_trait]
 impl ArgsImpl of ArgsTrait {
-    fn float(f: Float) -> Args {
-        return Args {a:f, b:FloatTrait::zero(), c:FloatTrait::zero()};
+    fn fixed(f: Fixed) -> Args {
+        let args_type = ArgsType::Fixed;
+        let a = FloatTrait::new(f.mag, f.sign);
+        return Args {args_type, a, b:FloatTrait::zero(), c:FloatTrait::zero()};
     }
-    fn add(x: u32, y: u32) -> Args {
+
+    fn add_fixed(x: u32, y: u32) -> Args {
+        let args_type = ArgsType::Fixed;
         let a = FloatTrait::new(x.into(), true);
         let b = FloatTrait::new(y.into(), true);
-        return Args {a, b, c:FloatTrait::zero()};
+        return Args {args_type, a, b, c:FloatTrait::zero()};
     }
 }
 
