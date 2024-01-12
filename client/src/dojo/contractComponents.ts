@@ -7,12 +7,12 @@ export function defineContractComponents(world: World) {
 	  Node: (() => {
 	    return defineComponent(
 	      world,
-	      { id: RecsType.Number, node_type: RecsType.Number, args: { a: { mag: RecsType.Number, sign: RecsType.Boolean }, b: { mag: RecsType.Number, sign: RecsType.Boolean }, c: { mag: RecsType.Number, sign: RecsType.Boolean } } },
+	      { id: RecsType.Number, node_type: RecsType.Number, args: { args_type: RecsType.Number, a: { mag: RecsType.Number, sign: RecsType.Boolean }, b: { mag: RecsType.Number, sign: RecsType.Boolean }, c: { mag: RecsType.Number, sign: RecsType.Boolean } } },
 	      {
 	        metadata: {
 	          name: "Node",
-	          types: ["u32","enum","u64","bool","u64","bool","u64","bool"],
-	          customTypes: ["NodeType","Args","Float","Float","Float"],
+	          types: ["u32","enum","enum","u64","bool","u64","bool","u64","bool"],
+	          customTypes: ["NodeType","Args","ArgsType","Float","Float","Float"],
 	        },
 	      }
 	    );
