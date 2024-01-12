@@ -17,6 +17,11 @@ impl NodeImpl of NodeTrait {
         let args = ArgsTrait::fixed(value);
         Node { id, node_type, args}
     }
+    fn add(id: u32, args_type: ArgsType, a:u32, b:u32) -> Node{
+        let node_type = NodeType::Add;
+        let args = ArgsTrait::add(args_type, a, b);
+        Node {id, node_type, args}
+    }
 }
 
 #[derive(Drop, Copy, Serde, Introspect)]
@@ -42,11 +47,6 @@ impl NodeTypeIntoFelt252 of Into<NodeType, felt252> {
     }
 }
 
-#[derive(Drop, Copy, Serde, Introspect)]
-struct Float{
-    mag: u64,
-    sign: bool
-}
 
 #[derive(Drop, Copy, Serde, Introspect)]
 enum ArgsType {
@@ -83,12 +83,17 @@ impl ArgsImpl of ArgsTrait {
         return Args {args_type, a, b:FloatTrait::zero(), c:FloatTrait::zero()};
     }
 
-    fn add_fixed(x: u32, y: u32) -> Args {
-        let args_type = ArgsType::Fixed;
+    fn add(args_type: ArgsType, x: u32, y: u32) -> Args {
         let a = FloatTrait::new(x.into(), true);
         let b = FloatTrait::new(y.into(), true);
         return Args {args_type, a, b, c:FloatTrait::zero()};
     }
+}
+
+#[derive(Drop, Copy, Serde, Introspect)]
+struct Float{
+    mag: u64,
+    sign: bool
 }
 
 #[generate_trait]
