@@ -9,5 +9,7 @@ export function createClientComponents({
     return {
         ...contractComponents,
         Shader: overridableComponent(contractComponents.Shader),
+        Node: overridableComponent(contractComponents.Node),
+        Sdf: overridableComponent(contractComponents.Sdf)
     };
 }

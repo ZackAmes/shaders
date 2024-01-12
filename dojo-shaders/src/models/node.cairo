@@ -21,7 +21,6 @@ struct Float{
     sign: bool
 }
 
-
 #[derive(Copy, Drop, Serde, Introspect)]
 struct Args {
     a: Float,

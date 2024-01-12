@@ -9,7 +9,7 @@ function App() {
     const {
         setup: {
             systemCalls: { spawn },
-            components: { Shader},
+            components: { Shader, Sdf, Node},
         },
         account: {
             create,
@@ -27,9 +27,16 @@ function App() {
 
     // get current component values
     const shader = useComponentValue(Shader, entityId);
+    let sdf = useComponentValue(Sdf, entityId);
+
+    if(sdf){
+        let root_id = getEntityIdFromKeys([BigInt(sdf?.root_id)]);
+        let root = useComponentValue(Node, root_id);
+
+        console.log(root)
+    }
 
     let {a, b, c} = shader ? shader.color : {a:0,b:0,c:0};
-    console.log(shader)
     let color = vec3(a/255,b/255,c/255);
 
     return (

@@ -4,6 +4,32 @@ import { defineComponent, Type as RecsType, World } from "@dojoengine/recs";
 
 export function defineContractComponents(world: World) {
   return {
+	  Node: (() => {
+	    return defineComponent(
+	      world,
+	      { id: RecsType.Number, node_type: RecsType.Number, args: { a: { mag: RecsType.Number, sign: RecsType.Boolean }, b: { mag: RecsType.Number, sign: RecsType.Boolean }, c: { mag: RecsType.Number, sign: RecsType.Boolean } } },
+	      {
+	        metadata: {
+	          name: "Node",
+	          types: ["u32","enum","u64","bool","u64","bool","u64","bool"],
+	          customTypes: ["NodeType","Args","Float","Float","Float"],
+	        },
+	      }
+	    );
+	  })(),
+	  Sdf: (() => {
+	    return defineComponent(
+	      world,
+	      { owner: RecsType.BigInt, root_id: RecsType.Number },
+	      {
+	        metadata: {
+	          name: "Sdf",
+	          types: ["felt252","u32"],
+	          customTypes: [],
+	        },
+	      }
+	    );
+	  })(),
 	  Shader: (() => {
 	    return defineComponent(
 	      world,
