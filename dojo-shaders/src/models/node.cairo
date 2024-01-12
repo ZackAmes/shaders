@@ -2,7 +2,7 @@ use cubit::f64::types::fixed::{Fixed, FixedTrait, ONE};
 use cubit::f64::types::vec2::{Vec2, Vec2Trait};
 use cubit::f64::types::vec3::{Vec3, Vec3Trait};
 
-#[derive(Model, Drop, Serde)]
+#[derive(Model, Drop,Copy, Serde)]
 struct Node {
     #[key]
     id: u32,
@@ -35,6 +35,40 @@ impl NodeImpl of NodeTrait {
         if(t == 7) {return NodeType::Length;};
         NodeType::None    
     }
+
+    fn is_base(self: Node) -> bool {
+            let node_type = self.get_type();
+
+            match node_type {
+                // base types
+                NodeType::None => {
+                    true
+                },
+                NodeType::Fixed => {
+                    true
+                },
+                NodeType::Vec2 => {
+                    true
+                },
+                NodeType::Vec3 => {
+                    true
+                },
+                NodeType::Position => {
+                    true
+                },
+                //operations
+                NodeType::Add => {
+                    false
+                },
+                NodeType::Sub => {
+                    false
+                },
+                NodeType::Length => {
+                    false
+                }
+            }
+
+        }
 }
 
 #[derive(Drop, Copy, Serde, Introspect)]

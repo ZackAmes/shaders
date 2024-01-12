@@ -43,9 +43,25 @@ mod tests {
         let shader = get!(world, caller, Shader);
         let sdf = get!(world, caller, Sdf);
 
-        let root = sdf.root_id;
+        let root = get!(world, sdf.root_id, Node);
 
-        println!("root: {root}");
+        let root_type = root.node_type;
+        let root_args_type = root.args.args_type;
+
+        println!("type: {root_type}, args_type: {root_args_type}");
+
+        actions_system.eval(root.id);
+
+        let root = get!(world, sdf.root_id, Node);
+
+        let root_type = root.node_type;
+        let root_args_type = root.args.args_type;
+
+        println!("type: {root_type}, args_type: {root_args_type}");
+
+
+
+        
     
     }
 
