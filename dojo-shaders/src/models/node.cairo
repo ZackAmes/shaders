@@ -105,7 +105,8 @@ enum ArgsType {
     Fixed,
     Vec2,
     Vec3,
-    Position
+    Position,
+    Color
 }
 
 impl ArgsTypeIntoU8 of Into<ArgsType, u8> {
@@ -116,6 +117,7 @@ impl ArgsTypeIntoU8 of Into<ArgsType, u8> {
             ArgsType::Vec2 => 2,
             ArgsType::Vec3 => 3,
             ArgsType::Position => 4,
+            ArgsType::Color => 5
         }
     }
 }
@@ -137,12 +139,26 @@ impl ArgsImpl of ArgsTrait {
         return Args {args_type, a, b:FloatTrait::zero(), c:FloatTrait::zero()};
     }
 
-    fn add(args_type: ArgsType, x: u32, y: u32) -> Args {
+    fn vec2(v: Vec2) -> Args {
+        let args_type: u8 = ArgsType::Vec2.into();
+        let a = FloatTrait::fromFixed(v.a);
+        let b = FloatTrait::fromFixed(v.b);
+        let c = FloatTrait::zero();
+
+        Args {args_type, a, b ,c}
+    }
+
+    //for operations that have the ids for 2 subnodes
+    fn two_ids(args_type: ArgsType, x: u32, y: u32) -> Args {
         let type_int: u8 = args_type.into();
         let a = FloatTrait::new(x.into(), true);
         let b = FloatTrait::new(y.into(), true);
-        return Args {args_type: type_int, a, b, c:FloatTrait::zero()};
+        let c = FloatTrait::zero();
+        return Args {args_type: type_int, a, b, c};
     }
+
+
+
 
     fn get_type(self: Args) -> ArgsType {
         let t = self.args_type;
@@ -166,6 +182,10 @@ impl FloatImpl of FloatTrait {
 
     fn new(mag: u64, sign: bool) -> Float {
         Float{mag, sign}
+    }
+
+    fn fromFixed(f: Fixed) -> Float {
+        Float {mag: f.mag, sign: f.sign}
     }
 
     fn zero() -> Float {

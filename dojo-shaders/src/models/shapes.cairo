@@ -1,12 +1,17 @@
 use cubit::f64::types::{vec2::{Vec2, Vec2Trait}, fixed::{Fixed, FixedTrait}};
 
-mod shapes {
 
-    use dojo_shaders::models::node::{Node, Float};
+#[derive(Model, Drop, Serde)]
+struct Shape {
+    #[key]
+    owner: felt252,
+    sdf_root_id: u32,
+    shader_root_id: u32
+}
 
-    fn circle(p: Vec2, r: Fixed) -> Node{
-
-        Node::Sub ( Node::Length(p), Node::Float(r));
-
+#[generate_trait]
+impl ShapeImpl of ShapeTrait {
+    fn new(owner: felt252, sdf_root_id: u32, shader_root_id: u32) -> Shape {
+        Shape {owner, sdf_root_id, shader_root_id}
     }
 }

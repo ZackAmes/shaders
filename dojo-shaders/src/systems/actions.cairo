@@ -13,7 +13,7 @@ mod actions {
 
     use starknet::{ContractAddress, get_caller_address};
     use dojo_shaders::models::shader::{Shader, ShaderTrait};
-    use dojo_shaders::models::sdf::{Sdf, SdfTrait};
+    use dojo_shaders::models::shapes::{Shape, ShapeTrait};
     use dojo_shaders::models::node::{Node, NodeType, NodeTrait, Float, FloatTrait, FloatImpl, Args,ArgsType, ArgsTrait};
     use cubit::f64::types::{fixed::{Fixed, FixedTrait}, vec2::{Vec2, Vec2Trait} };
 
@@ -40,9 +40,8 @@ mod actions {
 
             let mut add_node = NodeTrait::add(world.uuid(), ArgsType::Fixed, a_node.id, b_node.id);
 
-            let sdf = SdfTrait::new(caller, add_node.id);
 
-            set!(world, (shader, a_node, b_node, add_node, sdf));
+            set!(world, (shader, a_node, b_node, add_node, circle));
 
             
         }
@@ -125,6 +124,7 @@ mod actions {
                     }
 
                 },
+                //TODO
                 NodeType::Sub => {
                     node
                 },
