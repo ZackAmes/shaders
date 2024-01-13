@@ -3,12 +3,12 @@ use cubit::f64::types::{
     vec2::{Vec2, Vec2Trait},
     vec3::{Vec3, Vec3Trait}
 };
-use dojo_shaders::models::tsl::{
+
+use dojo_shaders::tsl::types::{
     args::{Args, ArgsTrait, ArgsType},
-    float::{Float}
+    node_type::{NodeType},
+    float::{Float, FloatTrait}
 };
-
-
 
 #[derive(Model, Drop,Copy, Serde)]
 struct Node {
@@ -28,7 +28,7 @@ impl NodeImpl of NodeTrait {
 
     fn add(id: u32, args_type: ArgsType, a:u32, b:u32) -> Node{
         let node_type: u8 = NodeType::Add.into();
-        let args = ArgsTrait::add(args_type, a, b);
+        let args = ArgsTrait::two_ids(args_type, a, b);
         Node {id, node_type, args}
     }
 

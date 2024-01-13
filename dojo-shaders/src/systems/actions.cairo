@@ -12,13 +12,17 @@ mod actions {
     use super::IActions;
 
     use starknet::{ContractAddress, get_caller_address};
-    use dojo_shaders::models::shader::{Shader, ShaderTrait};
-    use dojo_shaders::models::shapes::{Shape, ShapeTrait};
-    use dojo_shaders::models::tsl::{
+    use dojo_shaders::models::shape::{Shape, ShapeTrait};
+
+    use dojo_shaders::tsl::{
         node::{Node, NodeTrait},
-        node_type::{NodeType, NodeTypeTrait},
-        float::{ Float, FloatTrait}, 
-        args::{Args,ArgsType, ArgsTrait}};
+        types::{
+            float::{Float, FloatTrait},
+            args::{Args, ArgsTrait, ArgsType},
+            node_type::{NodeType, NodeTypeTrait}
+        }
+    };
+
     use cubit::f64::types::{fixed::{Fixed, FixedTrait}, vec2::{Vec2, Vec2Trait} };
 
     
@@ -34,6 +38,7 @@ mod actions {
             // Get the address of the current caller, possibly the player's address.
             let caller:felt252 = get_caller_address().into();
 
+
             let a = FixedTrait::new(2,true);
             let a_node = NodeTrait::fixed(world.uuid(), a);
 
@@ -42,8 +47,9 @@ mod actions {
 
             let mut add_node = NodeTrait::add(world.uuid(), ArgsType::Fixed, a_node.id, b_node.id);
 
-
-            set!(world, (shader, a_node, b_node, add_node, circle));
+            //fix
+            let circle = ShapeTrait::new(caller, a_node.id, b_node.id);
+            set!(world, (a_node, b_node, add_node, circle));
 
             
         }
@@ -96,10 +102,10 @@ mod actions {
                     let b_mag = b_args.a.mag;
                     println!("a: {a_mag} b: {b_mag}");
                     
-                    if(!a.is_base()) {
+                    if(!a.get_type().is_base()) {
                         a = self.eval_node(a.id);
                     }
-                    if(!b.is_base()) {
+                    if(!b.get_type().is_base()) {
                         b = self.eval_node(b.id);
                     }
 
@@ -114,7 +120,7 @@ mod actions {
                             NodeTrait::fixed(node.id, res) 
                         },
                         ArgsType::Vec2 => {
-                            
+                            node
                         },
                         ArgsType::Vec3 => {
                             node

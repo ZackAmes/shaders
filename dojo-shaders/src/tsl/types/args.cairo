@@ -1,4 +1,10 @@
-use dojo_shaders::models::tsl::{Float, FloatTrait};
+use dojo_shaders::tsl::types::float::{Float, FloatTrait};
+
+use cubit::f64::types::{
+    fixed::{Fixed, FixedTrait, ONE},
+    vec2::{Vec2, Vec2Trait},
+    vec3::{Vec3, Vec3Trait}
+};
 
 #[derive(Drop, Copy, Serde, Introspect)]
 enum ArgsType {
@@ -6,8 +12,7 @@ enum ArgsType {
     Fixed,
     Vec2,
     Vec3,
-    Position,
-    Color
+    Position
 }
 
 impl ArgsTypeIntoU8 of Into<ArgsType, u8> {
@@ -17,8 +22,7 @@ impl ArgsTypeIntoU8 of Into<ArgsType, u8> {
             ArgsType::Fixed => 1,
             ArgsType::Vec2 => 2,
             ArgsType::Vec3 => 3,
-            ArgsType::Position => 4,
-            ArgsType::Color => 5
+            ArgsType::Position => 4
         }
     }
 }
@@ -42,8 +46,8 @@ impl ArgsImpl of ArgsTrait {
 
     fn vec2(v: Vec2) -> Args {
         let args_type: u8 = ArgsType::Vec2.into();
-        let a = FloatTrait::fromFixed(v.a);
-        let b = FloatTrait::fromFixed(v.b);
+        let a = FloatTrait::fromFixed(v.x);
+        let b = FloatTrait::fromFixed(v.y);
         let c = FloatTrait::zero();
 
         Args {args_type, a, b ,c}
@@ -60,12 +64,20 @@ impl ArgsImpl of ArgsTrait {
 
 
     fn get_type(ref self: Args) -> ArgsType {
-        let t = self.args_type;
-        if(t == 1) {return ArgsType::Fixed;};
-        if(t == 2) {return ArgsType::Vec2;};
-        if(t == 3) {return ArgsType::Vec3;};
-        if(t == 4) {return ArgsType::Position;};
-        ArgsType::None
+        let mut t = self.args_type;
+        if(t == 1) {
+            return ArgsType::Fixed;
+        };
+        if(t == 2) {
+            return ArgsType::Vec2;
+        };
+        if(t == 3) {
+            return ArgsType::Vec3;
+        };
+        if(t == 4) {
+            return ArgsType::Position;
+        };
+        return ArgsType::None;
     }
     
 }

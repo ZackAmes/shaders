@@ -12,15 +12,16 @@ mod tests {
 
     // import test utils
     use dojo_shaders::{
+
         systems::{actions::{actions, IActionsDispatcher, IActionsDispatcherTrait}},
-        models::{
-            tsl::{
+        tsl::{
                 node::{node, Node, NodeTrait},
-                float::{ Float, FloatTrait}, 
-            shape::{shape, Shape, ShapeTrait}
-            },
-        }
+                types::float::{Float, FloatTrait},
+        },
+
+        models::{ shape::{shape, Shape, ShapeTrait}}
     };
+
 
 
     use cubit::f64::types::{fixed::{Fixed, FixedTrait, ONE}, vec2::{Vec2, Vec2Trait} };
@@ -48,8 +49,9 @@ mod tests {
         // call spawn()
         actions_system.spawn();
 
+        let shape = get!(world, caller, Shape);
 
-        let root = get!(world, sdf.root_id, Node);
+        let root = get!(world, shape.sdf_root_id, Node);
 
         let root_type = root.node_type;
         let root_args_type = root.args.args_type;
@@ -58,7 +60,7 @@ mod tests {
 
         actions_system.eval(root.id);
 
-        let root = get!(world, sdf.root_id, Node);
+        let root = get!(world, shape.shader_root_id, Node);
 
         let root_type = root.node_type;
         let root_args_type = root.args.args_type;

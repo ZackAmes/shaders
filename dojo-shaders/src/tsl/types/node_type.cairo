@@ -11,11 +11,11 @@ enum NodeType {
     Length
 }
 
-impl NodeTypeTrait of NodeTypeTrait{
-    fn is_base(self: Node) -> bool {
-            let node_type = self.get_type();
+#[generate_trait]
+impl NodeTypeImpl of NodeTypeTrait{
+    fn is_base(self: NodeType) -> bool {
 
-            match node_type {
+            match self {
                 // base types
                 NodeType::None => {
                     true

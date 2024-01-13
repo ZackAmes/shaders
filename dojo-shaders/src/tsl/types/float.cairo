@@ -1,4 +1,4 @@
-use cubit::f64::fixed::{Fixed,FixedTrait};
+use cubit::f64::types::fixed::{Fixed,FixedTrait};
 
 #[derive(Drop, Copy, Serde, Introspect)]
 struct Float{
