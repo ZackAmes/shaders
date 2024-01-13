@@ -13,7 +13,13 @@ mod tests {
     // import test utils
     use dojo_shaders::{
         systems::{actions::{actions, IActionsDispatcher, IActionsDispatcherTrait}},
-        models::{shader::{shader, Shader}, sdf::{sdf, Sdf, SdfTrait}, node::{Node, Float, FloatTrait}}
+        models::{
+            tsl::{
+                node::{node, Node, NodeTrait},
+                float::{ Float, FloatTrait}, 
+            shape::{shape, Shape, ShapeTrait}
+            },
+        }
     };
 
 
@@ -27,7 +33,9 @@ mod tests {
         let caller = starknet::contract_address_const::<0x0>();
 
         // models
-        let mut models = array![shader::TEST_CLASS_HASH];
+        let mut models = array![node::TEST_CLASS_HASH,
+                                shape::TEST_CLASS_HASH
+                                ];
 
         // deploy world with models
         let world = spawn_test_world(models);
@@ -40,8 +48,6 @@ mod tests {
         // call spawn()
         actions_system.spawn();
 
-        let shader = get!(world, caller, Shader);
-        let sdf = get!(world, caller, Sdf);
 
         let root = get!(world, sdf.root_id, Node);
 

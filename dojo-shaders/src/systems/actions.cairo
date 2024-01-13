@@ -14,7 +14,11 @@ mod actions {
     use starknet::{ContractAddress, get_caller_address};
     use dojo_shaders::models::shader::{Shader, ShaderTrait};
     use dojo_shaders::models::shapes::{Shape, ShapeTrait};
-    use dojo_shaders::models::node::{Node, NodeType, NodeTrait, Float, FloatTrait, FloatImpl, Args,ArgsType, ArgsTrait};
+    use dojo_shaders::models::tsl::{
+        node::{Node, NodeTrait},
+        node_type::{NodeType, NodeTypeTrait},
+        float::{ Float, FloatTrait}, 
+        args::{Args,ArgsType, ArgsTrait}};
     use cubit::f64::types::{fixed::{Fixed, FixedTrait}, vec2::{Vec2, Vec2Trait} };
 
     
@@ -29,8 +33,6 @@ mod actions {
 
             // Get the address of the current caller, possibly the player's address.
             let caller:felt252 = get_caller_address().into();
-
-            let shader = ShaderTrait::red(caller);
 
             let a = FixedTrait::new(2,true);
             let a_node = NodeTrait::fixed(world.uuid(), a);
@@ -112,7 +114,7 @@ mod actions {
                             NodeTrait::fixed(node.id, res) 
                         },
                         ArgsType::Vec2 => {
-                            node
+                            
                         },
                         ArgsType::Vec3 => {
                             node

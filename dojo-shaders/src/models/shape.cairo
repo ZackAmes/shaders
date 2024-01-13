@@ -1,5 +1,3 @@
-use cubit::f64::types::{vec2::{Vec2, Vec2Trait}, fixed::{Fixed, FixedTrait}};
-
 
 #[derive(Model, Drop, Serde)]
 struct Shape {

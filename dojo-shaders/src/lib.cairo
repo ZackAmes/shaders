@@ -3,9 +3,13 @@ mod systems {
 }
 
 mod models {
-    mod shader;
-    mod sdf;
-    mod node;
+    mod shape;
+    mod tsl {
+        mod node;
+        mod node_type;
+        mod float;
+        mod args;
+    }
 }
 
 mod tests {
